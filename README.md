@@ -1,6 +1,6 @@
 # S25-CSS_G2_BR_SL
 
-# [Project Title]
+# [project Title]
 
 ## Overview
 Provide a clear description of your project, its objectives, and key functionalities.
