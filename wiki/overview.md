@@ -9,28 +9,43 @@ To implement a secure, role-based access system for corporate environments using
 - Session handling
 - Logout and timeout functionality
 
-**Title**: [Brief description of the issue]
+Title: Create login functionality with username and password
 
-**Description**:
-A detailed explanation of the issue, including steps to reproduce, expected behavior, and actual behavior.
+Description:
+Implement a secure login feature where users can enter a username and password to gain access to a protected area of the application. If credentials are valid, users are redirected to a success page. If invalid, an error message is shown.
 
-**Steps to Reproduce**:
-1. Step one
-2. Step two
+Steps to Reproduce:
 
-**Expected Behavior**:
-What you expected to happen.
+Navigate to the login.html page.
 
-**Actual Behavior**:
-What actually happened.
+Enter a sample username and password.
 
-**Additional Context**:
-Add any other context about the problem here.
+Click the "Login" button.
 
-**Labels**:
-- bug
-- documentation
+Expected Behavior:
+Users with correct credentials are redirected to a success.html page, while users with incorrect credentials see an error message on error.html.
 
-**Assignees**:
-@username
+Actual Behavior:
+Currently, login functionality does not exist. No input validation or credential matching is implemented yet.
+
+Additional Context:
+
+User credentials will be stored in a users.txt file or a simple data structure.
+
+Basic validation and sanitization will be added to prevent injection attacks.
+
+Future enhancements may include hashing passwords.
+
+Labels:
+
+enhancement
+
+feature
+
+security
+
+Assignees:
+@Brrivera08
+
+Want me to do the same for Issue #2 or help you write it?
 
