@@ -69,9 +69,9 @@ The main goal of this project is to:
 
 See the [Wiki](https://github.com/Brrivera08/S25_CSS_G2_BR_SL/wiki) for:
 
-- ✅ [User Stories](https://github.com/Brrivera08/S25_CSS_G2_BR_SL/wiki/User-Stories)  
-- 🔐 [Access Control & Authentication](https://github.com/Brrivera08/S25_CSS_G2_BR_SL/wiki/Access-Control)  
-- 🚨 [Security Monitoring & Alerts](https://github.com/Brrivera08/S25_CSS_G2_BR_SL/wiki/Alert-System)
+- ✅ [User Stories]
+- 🔐 [Access Control & Authentication]
+- 🚨 [Security Monitoring & Alerts]
 
 ---
 
