@@ -5,7 +5,6 @@ import os
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Store temp users in memory (for demonstration)
 temp_users = {}
 
 def load_users(filename='users.txt'):
@@ -66,7 +65,6 @@ def hr_dashboard():
 
     return render_template('hr_dashboard.html', temp_users=temp_users, message=message)
 
-# Optional: A route to validate temp users (for demo)
 @app.route('/validate_temp', methods=['POST'])
 def validate_temp():
     data = request.form
