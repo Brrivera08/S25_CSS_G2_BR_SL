@@ -68,9 +68,6 @@ User is only granted access to the success.html page after passing both password
 Actual Behavior:
 Currently, users are redirected to the success page after only entering a correct username and password. There is no second factor involved.
 
-Screenshots:
-Not applicable at this stage – pending feature development.
-
 Additional Context:
 
 The second factor could be a hardcoded code, time-based code (like Google Authenticator), or sent via email/text.
@@ -123,8 +120,6 @@ When offboarding is detected, the user's system access is automatically revoked,
 Actual Behavior:
 Currently, the system has no awareness of HR changes. Access revocation is manual and potentially delayed.
 
-Screenshots:
-Not available – integration still under development.
 
 Additional Context:
 
@@ -180,9 +175,6 @@ The user’s access is completely revoked — all roles, credentials, and permis
 Actual Behavior:
 Currently, access remains active after offboarding unless manually revoked.
 
-Screenshots:
-Not applicable – logic still under development.
-
 Additional Context:
 
 This is a continuation of Issue #3 (detecting offboarding events).
@@ -237,9 +229,6 @@ Temporary roles are applied immediately and expire automatically when their dura
 
 Actual Behavior:
 The current system does not differentiate between temporary and permanent roles. All roles remain active until manually removed.
-
-Screenshots:
-No screenshots – functionality not yet implemented.
 
 Additional Context:
 
@@ -298,9 +287,6 @@ HR can efficiently assign access with proper controls in place. The system ensur
 
 Actual Behavior:
 There is currently no interface or automated way for HR to assign temporary access roles.
-
-Screenshots:
-N/A – feature not yet built.
 
 Additional Context:
 
@@ -364,9 +350,6 @@ Token is securely generated and emailed. It expires after a set time, is valid o
 Actual Behavior:
 There is no current functionality for password reset or token generation.
 
-Screenshots:
-Not available yet – feature pending development.
-
 Additional Context:
 
 Use libraries such as secrets, itsdangerous, or uuid for token generation.
@@ -428,9 +411,6 @@ The form enforces strong password rules, ensures both fields match, and only all
 Actual Behavior:
 There is currently no form for password reset through tokenized links.
 
-Screenshots:
-N/A – feature pending.
-
 Additional Context:
 
 Token validation must occur before password reset is allowed.
@@ -489,9 +469,6 @@ The system should restrict excessive reset requests per IP/email, prompt for CAP
 Actual Behavior:
 Currently, the system does not limit reset attempts or use CAPTCHA, leaving it vulnerable to automated abuse.
 
-Screenshots:
-N/A – feature pending implementation.
-
 Additional Context:
 
 CAPTCHA can be integrated using Google reCAPTCHA, hCaptcha, or a simple math challenge.
@@ -546,9 +523,6 @@ The system should detect and flag unusual behavior, then alert an admin or log t
 
 Actual Behavior:
 No monitoring or alerting currently exists. Login activity is not actively tracked or responded to.
-
-Screenshots:
-N/A – feature in planning phase.
 
 Additional Context:
 
@@ -605,9 +579,6 @@ Admins can log in to a protected dashboard, view recent alerts, filter them, and
 Actual Behavior:
 There is currently no interface or tool for managing or tracking security alerts.
 
-Screenshots:
-Not available – feature in development.
-
 Additional Context:
 
 UI may use an HTML table layout with Bootstrap or another lightweight framework.
@@ -647,3 +618,625 @@ UI
 Assignees:
 
 __________________________________________________________
+
+Title: Logging and Audit Trail for User Access and Permission Changes
+
+Description:
+Implement a secure, tamper-resistant audit logging system to track user access events and permission changes. This system is critical for compliance, accountability, and forensic analysis in the event of a breach or policy violation. Logs must be queryable by authorized personnel and protected from unauthorized tampering or exposure.
+
+Steps to Reproduce:
+
+A user logs in or accesses a protected system feature.
+
+An admin assigns, revokes, or modifies a user’s roles or permissions.
+
+The system records these events into the audit log.
+
+An auditor accesses the logs through a UI or export function.
+
+Expected Behavior:
+All sensitive access and permission changes are logged with metadata (user, timestamp, action). Logs are only viewable by authorized roles and can be exported or filtered for review.
+
+Actual Behavior:
+Currently, no audit logging is implemented. Actions are not being tracked or reviewed.
+
+Additional Context:
+
+Log format may be JSON, plaintext, or database-based
+
+Consider hash chaining or digital signatures to ensure tamper detection
+
+Events may include: login success/failure, 2FA activity, access grant/revoke, password reset, temporary role assignment
+
+TASKS:
+
+ Define schema for audit logs (access events and permission changes)
+
+ Implement logging of user access events
+
+ Implement logging of permission and role changes
+
+ Ensure logs are stored securely and are tamper-resistant
+
+ Build a UI or export mechanism for auditors to review logs
+
+ Restrict access to audit logs via role-based permissions
+
+ Write unit and integration tests for log generation and access control
+
+ Document the audit log system for internal and compliance use
+
+Labels:
+
+security
+
+logging
+
+compliance
+
+enhancement
+
+admin-tools
+
+Assignees:
+
+__________________________________________________________
+
+Title: Implement Log Retention Policy and Alerts for Sensitive Permission Changes
+
+Description:
+Strengthen the audit logging framework by introducing a log retention policy that automatically archives or purges logs after a defined period, and by generating real-time alerts for high-risk permission changes. This ensures sensitive actions like admin role assignments are monitored closely and audit logs remain compliant with organizational data policies.
+
+Steps to Reproduce:
+
+Grant or revoke a high-privilege role (e.g., admin, auditor).
+
+The system triggers a real-time alert and stores the event.
+
+Wait for logs to exceed the retention period and verify archival/purging.
+
+Expected Behavior:
+Sensitive changes trigger immediate alerts. Logs are automatically managed according to the retention policy and remain immutable, accessible only to authorized users.
+
+Actual Behavior:
+No alerting or automated retention process exists. Logs may grow uncontrolled and sensitive changes can go unnoticed.
+
+Additional Context:
+
+Retention may be enforced via cron jobs, Flask background tasks, or serverless jobs
+
+Immutability may be achieved using hashing, append-only files, or WORM storage
+
+Alerts can be tied into Slack, email, or an internal dashboard
+
+TASKS:
+
+ Implement automated log archival or purging process
+
+ Identify high-risk permission changes that require alerting
+
+ Implement alert generation for flagged permission changes
+
+ Ensure audit log storage supports immutability and integrity validation
+
+ Add automated tests for log retention and alert triggering
+
+ Create internal documentation on log policy and alert scope
+
+ Review solution with compliance and legal stakeholders
+
+Labels:
+
+security
+
+logging
+
+compliance
+
+alerting
+
+automation
+
+Assignees:
+
+__________________________________________________________
+
+Title: Access Request Approval Workflow for Department Managers
+
+Description:
+Develop a secure access request and approval workflow where team members can request elevated roles or system permissions, which must be reviewed and approved by their designated department manager. This ensures that access is granted only with proper oversight and aligns with least-privilege policies.
+
+Steps to Reproduce:
+
+A team member fills out a request form specifying the desired role and justification.
+
+The system routes the request to the assigned department manager.
+
+The manager reviews and approves or denies the request.
+
+The user is granted access upon approval or notified of denial.
+
+Expected Behavior:
+Only users whose requests are approved by their assigned manager are granted access. All actions (submission, review, decision) are logged with timestamps and user IDs.
+
+Actual Behavior:
+There is currently no approval workflow or formal access request structure in place.
+
+Additional Context:
+
+Useful for onboarding, new project assignments, or temporary access
+
+May use a Flask route like /access-request and /manager-dashboard
+
+Logs should be written to the existing audit log system
+
+Manager-user mappings can be stored in a config file, DB, or HR integration
+
+TASKS:
+
+ Create access request form for team members
+
+ Implement backend logic to route requests to appropriate department manager
+
+ Design and build manager dashboard for pending requests
+
+ Enable approve/deny functionality with optional comments
+
+ Send notifications to managers for new requests
+
+ Log all actions (requests, approvals, denials) with timestamps and user IDs
+
+ Apply access control to ensure managers only see relevant requests
+
+ Write tests for request flow, approvals, and access logic
+
+ Document the access request and approval process for end users and admins
+
+Labels:
+
+access-control
+
+workflow
+
+approvals
+
+dashboard
+
+enhancement
+
+Assignees:
+
+__________________________________________________________
+
+Title: Notifications and Escalation Workflow for Access Requests
+
+Description:
+Develop a robust notification and escalation system to ensure access requests are acted on in a timely manner. The system should notify department managers of new requests, send reminders for pending approvals, and escalate overdue requests to fallback approvers or higher-level admins. Users should also be kept informed of their request status throughout the process.
+
+Steps to Reproduce:
+
+A team member submits an access request.
+
+The department manager is notified.
+
+If the request is not reviewed after a defined interval, a reminder is sent.
+
+If still unresolved, the request escalates to a fallback approver.
+
+The user is notified of any changes to the request status.
+
+Expected Behavior:
+Managers receive timely alerts, and no request is left unattended. Escalations occur automatically, users are kept informed, and all actions are logged.
+
+Actual Behavior:
+No current system for automated reminders, escalations, or user status notifications exists.
+
+Additional Context:
+
+Escalation timeframes should be configurable (e.g., 24h, 48h)
+
+Notifications can be via email, Slack, or in-app dashboard alerts
+
+Manager preferences could include opting in/out of certain notification types
+
+TASKS:
+
+ Implement notification system for new and pending access requests
+
+ Add reminder notifications for unreviewed requests after defined intervals
+
+ Design escalation logic for overdue requests
+
+ Identify and configure fallback approvers for escalation
+
+ Notify users of request status changes
+
+ Add settings for managers to customize notification preferences
+
+ Write unit and integration tests for notification and escalation flows
+
+ Document the escalation and notification process for managers and admins
+
+Labels:
+
+automation
+
+notifications
+
+escalation
+
+workflow
+
+access-control
+
+Assignees:
+
+__________________________________________________________
+
+Title: Align Access Control Policies with Industry Compliance Standards
+
+Description:
+Ensure the project’s access control mechanisms comply with major industry regulations and standards (e.g., NIST 800-53, ISO 27001, HIPAA, SOC 2). This involves conducting a gap analysis, updating policies, collaborating with security teams, and preparing the system for internal/external audits. The end goal is to formalize, document, and enforce access governance that meets industry compliance expectations.
+
+Steps to Reproduce:
+
+Select a standard (e.g., NIST 800-53 or ISO 27001).
+
+Review current access control workflows and policies.
+
+Identify any gaps or non-compliant practices.
+
+Implement necessary changes and document alignment.
+
+Expected Behavior:
+Access controls are aligned with industry standards, documented formally, and supported by an audit trail. Training and enforcement reflect these policies across the project.
+
+Actual Behavior:
+Controls are implemented functionally but have not yet been audited or mapped to official compliance frameworks.
+
+Additional Context:
+
+This issue supports audit-readiness and risk reduction
+
+Formal policy alignment benefits future enterprise integration, funding, or deployment
+
+Examples of compliance targets:
+
+NIST 800-53 Rev 5 (AC family)
+
+ISO/IEC 27001 Annex A.9
+
+HIPAA Security Rule
+
+SOC 2 Trust Services Criteria
+
+TASKS:
+
+ Identify relevant industry standards and regulations for access control
+
+ Perform a gap analysis of current access control policies against selected standards
+
+ Document required changes to align with compliance requirements
+
+ Collaborate with IT/security teams to update and enforce access control mechanisms
+
+ Update formal access control policy documentation
+
+ Create a compliance checklist and audit trail for future reviews
+
+ Review and update training materials to reflect new policy changes
+
+ Establish a recurring review process (e.g., quarterly) for policy compliance
+
+ Conduct internal review or mock audit to validate changes
+
+Labels:
+
+compliance
+
+access-control
+
+policy
+
+audit
+
+documentation
+
+Assignees:
+
+__________________________________________________________
+
+Title: Implement Role-Based Access Control (RBAC) According to Updated Compliance Policies
+
+Description:
+Develop and enforce a Role-Based Access Control (RBAC) system that reflects the newly updated, compliance-aligned access control policies. This model ensures that users are only granted access based on their role, with permissions assigned according to regulatory best practices like least privilege, separation of duties, and auditability.
+
+Steps to Reproduce:
+
+Review updated access control policies aligned with NIST, ISO 27001, HIPAA, or SOC 2.
+
+Define key system roles (e.g., User, HR, Manager, Admin, Auditor).
+
+Map each role to its allowed actions and access boundaries.
+
+Apply role enforcement in the system and test.
+
+Expected Behavior:
+Each user can only access and perform actions permitted by their role. Unauthorized access is prevented and logged, and documentation supports audit readiness.
+
+Actual Behavior:
+Access enforcement may be inconsistent or not fully aligned with policy updates.
+
+Additional Context:
+
+Roles should be structured to reflect operational needs and compliance requirements
+
+Supports audit trail for role assignment and privilege elevation
+
+May use Flask decorators or middleware for route-level role enforcement
+
+TASKS:
+
+ Review updated compliance-aligned access control policies
+
+ Identify and define user roles based on compliance requirements
+
+ Assign specific permissions to each role
+
+ Update the access control system to enforce role-based permissions
+
+ Test access control behavior for each role type
+
+ Create documentation for roles and permissions
+
+ Conduct a review to ensure RBAC aligns with compliance standards
+
+Labels:
+
+RBAC
+
+access-control
+
+compliance
+
+security
+
+enhancement
+
+Assignees:
+
+__________________________________________________________
+
+Title: Audit Existing User Accounts for Role Compliance
+
+Description:
+Perform a comprehensive audit of all active user accounts to ensure that their assigned roles and permissions align with the approved Role-Based Access Control (RBAC) model. This will help detect role misassignments, prevent privilege creep, and ensure adherence to compliance requirements.
+
+Steps to Reproduce:
+
+Generate a report of all active users and their current roles/permissions.
+
+Match each role against the documented RBAC definitions.
+
+Flag any accounts with excessive or misaligned privileges.
+
+Correct and document any role adjustments.
+
+Expected Behavior:
+All users hold roles appropriate to their function. Any anomalies are corrected and logged as part of the audit trail.
+
+Actual Behavior:
+There may be outdated or manually assigned roles that do not comply with the current RBAC structure.
+
+Additional Context:
+
+This audit supports SOC 2, NIST, and ISO compliance audits
+
+Audit findings should be logged and reported to compliance and security stakeholders
+
+Can be automated using a script or manually verified if the user base is small
+
+TASKS:
+
+ Export list of all active users and their current permissions
+
+ Compare roles to RBAC definitions
+
+ Reassign incorrect roles as needed
+
+ Flag anomalies or excessive privileges for review
+
+ Log all role adjustments and keep audit trail
+
+ Notify affected users of any changes (if applicable)
+
+ Document audit results for internal compliance reports
+
+ Schedule this audit as a recurring task (e.g., quarterly)
+
+Labels:
+
+RBAC
+
+compliance
+
+audit
+
+access-control
+
+security
+
+Assignees:
+
+__________________________________________________________
+
+Title: Set Up Automated Alerts for Unauthorized Access Attempts
+
+Description:
+Build an automated alerting system that monitors for and responds to unauthorized access attempts such as failed logins, invalid token usage, or restricted resource access. This system should notify security personnel or admins in real-time when thresholds are crossed, enhancing detection and response capabilities.
+
+Steps to Reproduce:
+
+A user attempts to log in multiple times with incorrect credentials.
+
+A user tries to access an endpoint without sufficient privileges.
+
+Alert is triggered based on pre-defined conditions and sent to admin.
+
+Expected Behavior:
+Unauthorized attempts are detected and alerts are delivered instantly via email or shown in the system dashboard.
+
+Actual Behavior:
+Currently, unauthorized access attempts may be logged, but no real-time alert system is in place.
+
+Additional Context:
+
+Thresholds could include:
+
+3+ failed login attempts in 5 minutes
+
+Access to restricted URL without proper role
+
+Reuse of expired or invalid token
+
+Alerts should not overwhelm admins—apply throttling or escalation when needed
+
+TASKS:
+
+ Define thresholds for alert triggers
+
+ Set up alerting via email or dashboard notifications
+
+ Test alert functionality with simulated failed logins
+
+ Document alert configuration
+
+Labels:
+
+alerting
+
+security
+
+monitoring
+
+intrusion-detection
+
+Assignees:
+
+__________________________________________________________
+
+Title: Conduct Access Control Penetration Testing
+
+Description:
+Perform penetration testing targeting the system's access control components. The goal is to uncover vulnerabilities such as privilege escalation, unauthorized access to restricted data or functions, and broken role enforcement. Findings will be used to strengthen the RBAC system and ensure compliance with security best practices.
+
+Steps to Reproduce:
+
+Log in as a user with minimal access (e.g., intern, basic user).
+
+Attempt to perform actions or reach views restricted to higher roles (e.g., admin dashboard, role assignment features).
+
+Try manipulating session data, tokens, or request parameters.
+
+Document and patch any successful bypasses.
+
+Expected Behavior:
+All unauthorized actions should be blocked by the RBAC enforcement. Any exploit should be fully logged and remediated.
+
+Actual Behavior:
+No penetration testing has been performed on the current access control implementation, so vulnerabilities may exist.
+
+Additional Context:
+
+Testing can use tools such as Postman, Burp Suite, curl, or custom Python scripts
+
+Tests should include both vertical and horizontal privilege escalation attempts
+
+Findings may support the internal audit and future compliance reviews
+
+TASKS:
+
+ Prepare test accounts for various roles
+
+ Attempt privilege escalation and unauthorized access
+
+ Document vulnerabilities or bypasses found
+
+ Patch issues and retest
+
+Labels:
+
+penetration-testing
+
+RBAC
+
+security
+
+access-control
+
+vulnerability-assessment
+
+Assignees:
+
+__________________________________________________________
+
+Title: Create User Access Review Workflow for Quarterly Audits
+
+Description:
+Establish a structured quarterly user access review process that enables IT or security staff to evaluate whether each user’s current role and permissions are still appropriate. This workflow supports regulatory compliance, enforces least-privilege principles, and creates a repeatable audit trail.
+
+Steps to Reproduce:
+
+Identify all active user accounts and their assigned roles.
+
+Assign reviewers to departments or user groups.
+
+Conduct a quarterly session where each account is reviewed.
+
+Document results and take corrective actions (e.g., revoke outdated access).
+
+Expected Behavior:
+A repeatable, documented process exists for reviewing user access each quarter, with actions logged and records maintained for compliance.
+
+Actual Behavior:
+Currently, user access is not formally reviewed on a recurring basis.
+
+Additional Context:
+
+Required by many compliance frameworks: NIST 800-53, ISO 27001, SOC 2, HIPAA
+
+Results should be stored securely and available for audit review
+
+Process may be triggered automatically via a task scheduler or calendar alert
+
+TASKS:
+
+ Draft a user access review process document
+
+ Assign review responsibilities to IT/security staff
+
+ Build a checklist or tool to assist with reviews
+
+ Schedule first access review session
+
+ Archive review results for compliance records
+
+ Notify reviewers at the beginning of each quarterly cycle
+
+ Log actions taken during reviews and track completion status
+
+ Update training materials to include reviewer responsibilities
+
+Labels:
+
+access-review
+
+compliance
+
+audit
+
+documentation
+
+workflow
+
+Assignees:
