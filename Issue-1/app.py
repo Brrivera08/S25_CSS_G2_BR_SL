@@ -3,13 +3,24 @@ from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-def load_users():
+import os
+
+def load_users(filename='users.txt'):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, filename)
+    
     users = {}
-    with open('users.txt', 'r') as f:
-        for line in f:
-            username, password = line.strip().split(':')
-            users[username] = password
+    try:
+        with open(file_path, 'r') as file:
+            for line in file:
+                line = line.strip()
+                if ':' in line:
+                    username, password = line.split(':', 1)
+                    users[username.strip()] = password.strip()
+    except FileNotFoundError:
+        print(f"[Error] User database file not found at: {file_path}")
     return users
+
 
 @app.route('/')
 def home():
