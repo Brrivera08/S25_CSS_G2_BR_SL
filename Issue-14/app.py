@@ -266,5 +266,11 @@ def hr_home():
         return redirect(url_for('login'))
     return render_template('hr_home.html')
 
+@app.route('/hr_approvals')
+def hr_approvals():
+    if session.get('username') != 'HRManager':
+        return redirect(url_for('login'))
+    return render_template('hr_approvals.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
