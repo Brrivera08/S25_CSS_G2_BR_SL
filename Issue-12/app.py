@@ -19,6 +19,12 @@ def log_alert(message, filename='logs.txt'):
     with open(path, 'a') as file:
         file.write(alert_message + "\n")
 
+def write_audit_log(event_type, username, details=""):
+    path = os.path.join(os.path.dirname(__file__), 'audit_log.txt')
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(path, 'a') as file:
+        file.write(f"[{timestamp}] [{event_type}] user: {username} - {details}\n")
+
 def load_users(filename='users.txt'):
     path = os.path.join(os.path.dirname(__file__), filename)
     users = {}
@@ -78,6 +84,7 @@ def login():
         if username in users and users[username] == password:
             failed_logins[username] = 0  # reset counter
             session['username'] = username
+            write_audit_log("LOGIN", username, "Successful login")
             code = '123456'
             session['2fa_code'] = code
             print(f"[2FA] Code for {username}: {code}")
@@ -127,6 +134,36 @@ def success():
 
     return render_template('success.html', username=username)
 
+def alerts():
+    if session.get('username') != 'admin':
+        return redirect(url_for('login'))
+
+    log_path = os.path.join(os.path.dirname(__file__), 'logs.txt')
+    alerts = []
+
+    # Load alerts from logs.txt
+    if os.path.exists(log_path):
+        with open(log_path, 'r') as file:
+            for line in file:
+                if '[ALERT]' in line:
+                    parts = line.strip().split('] ', 2)
+                    timestamp = parts[0].replace('[', '')
+                    message = parts[-1].replace('[ALERT] ', '')
+                    reviewed = '[REVIEWED]' in line
+                    alerts.append({
+                        'timestamp': timestamp,
+                        'message': message.replace('[REVIEWED]', '').strip(),
+                        'reviewed': reviewed
+                    })
+
+    # Handle POST to mark alert as reviewed (simulated in memory)
+    if request.method == 'POST':
+        index = int(request.form['reviewed'])
+        alerts[index]['reviewed'] = True
+        # Optionally: update file here (advanced version)
+
+    return render_template('alerts.html', alerts=alerts)
+
 @app.route('/hr_dashboard', methods=['GET', 'POST'])
 def hr_dashboard():
     if session.get('username') != 'HRManager':
@@ -152,6 +189,8 @@ def hr_dashboard():
                 'access_level': access_level,
                 'expires_at': expiry.strftime('%Y-%m-%d %H:%M:%S')
             }
+
+            write_audit_log("ROLE_ASSIGN", session['username'], f"Gave temporary access to '{new_user}' (level {access_level}, {duration} mins)")
 
             message = f"Temporary user '{new_user}' created with Access Level {access_level}, expires at {expiry.strftime('%Y-%m-%d %H:%M:%S')}."
 
@@ -206,6 +245,7 @@ def set_new_password():
         email = session.get('reset_email')
         # You would update the user's password in the real database here
         print(f"[Simulation] Password for {email} changed to: {new_password}")
+        write_audit_log("PASSWORD_RESET", email, "Password was updated")
         session.pop('reset_email', None)
         message = "Your password has been updated. Please log in."
         return render_template('login.html', error=message)
