@@ -257,5 +257,17 @@ def log_password_change(username, filename='password_change_log.txt'):
     with open(log_path, 'a') as log_file:
         log_file.write(f"[{timestamp}] Password changed for user: {username}\n")
 
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+
+        username = session.get('username', 'unknown_user')
+
+        log_password_change(username)
+
+        return redirect(url_for('login')) 
+    return render_template('reset_password.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
