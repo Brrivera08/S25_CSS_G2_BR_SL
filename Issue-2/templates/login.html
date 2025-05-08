@@ -1,17 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
     <title>Login</title>
 </head>
 <body>
-    <h2>Login Page</h2>
-    <form method="POST" action="/login">
-        Username: <input type="text" name="username" required><br><br>
-        Password: <input type="password" name="password" required><br><br>
-        <input type="submit" value="Login">
-    </form>
+    <h2>Login</h2>
     {% if error %}
         <p style="color:red;">{{ error }}</p>
     {% endif %}
+    <form method="post">
+        Username: <input type="text" name="username"><br><br>
+        Password: <input type="password" name="password"><br><br>
+        <input type="submit" value="Login">
+    </form>
+    <p><b>For testing, the 2FA code will be <code>123456</code></b></p>
 </body>
 </html>
