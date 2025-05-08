@@ -261,9 +261,6 @@ def set_new_password():
 
     return render_template('set_new_password.html')
 
-def get_pending_requests():
-    # This is just an example; you should replace this with actual logic
-    return [request for request in pending_requests if request['status'] == 'pending']
 
 @app.route('/hr_home')
 def hr_home():
@@ -274,13 +271,16 @@ def hr_home():
 
     return render_template('hr_home.html', pending_requests=pending_requests)
 
+def get_pending_requests():
+    # This checks each request in the list to ensure 'status' exists
+    pending_requests = [
+        {'id': 1, 'employee': 'John Doe', 'type': 'Leave', 'details': 'Vacation leave', 'status': 'pending'},
+        {'id': 2, 'employee': 'Jane Smith', 'type': 'Leave', 'details': 'Sick leave', 'status': 'approved'}
+    ]
+    
+    # Filter requests that are still pending
+    return [request for request in pending_requests if request.get('status') == 'pending']
 
-# Sample requests
-pending_requests = [
-    {'id': 1, 'employee': 'alice', 'type': 'Access Level Increase', 'details': 'Requesting level 3 access'},
-    {'id': 2, 'employee': 'bob', 'type': 'Time Extension', 'details': 'Extend temporary access by 1 hour'},
-    {'id': 3, 'employee': 'charlie', 'type': 'Reinstatement', 'details': 'Reinstate account after offboarding'}
-]
 
 @app.route('/hr_approvals', methods=['GET', 'POST'])
 def hr_approvals():
