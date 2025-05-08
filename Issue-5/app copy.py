@@ -93,11 +93,16 @@ def success():
 
     hr_status = load_hr_status()
     username = session['username']
+
     if username in hr_status and hr_status[username] == "offboarded":
         revoke_access(username)
         return redirect(url_for('login'))
 
+    if username == 'HRManager':
+        return redirect(url_for('hr_dashboard'))
+
     return render_template('success.html', username=username)
+
 
 @app.route('/hr_dashboard', methods=['GET', 'POST'])
 def hr_dashboard():
