@@ -253,11 +253,12 @@ def set_new_password():
             return "Missing password field", 400
 
         print(f"[Simulation] Password for {email} changed to: {new_password}")
-        write_audit_log("PASSWORD_RESET", email, "Password was updated")
+        write_password_change_log(email, "Password was updated")
         session.pop('reset_email', None)
         return render_template('login.html', error="Your password has been updated.")
 
     return render_template('set_new_password.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
