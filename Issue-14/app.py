@@ -286,24 +286,29 @@ def hr_approvals():
         return redirect(url_for('login'))
 
     global pending_requests
-
     if request.method == 'POST':
+        req_id = request.form.get('req_id')
         action = request.form.get('action')
-        req_id = int(request.form.get('request_id'))
 
-        request_entry = next((r for r in pending_requests if r['id'] == req_id), None)
-        if request_entry:
-              if action == 'approve':
-                     flash(f"✅ Approved request {req_id} for {request_entry['employee']}")
-                     write_audit_log("HR_APPROVE", session['username'], f"Approved: {request_entry}")
-                     write_hr_action_log("APPROVED", session['username'], request_entry)
-              elif action == 'deny':
-                  flash(f"❌ Denied request {req_id} for {request_entry['employee']}")
-                  write_audit_log("HR_DENY", session['username'], f"Denied: {request_entry}")
-                  write_hr_action_log("DENIED", session['username'], request_entry)
-    pending_requests = [r for r in pending_requests if r['id'] != req_id]
+        if req_id and action:
+            # Find the request by ID
+            request_entry = next((r for r in pending_requests if r['id'] == req_id), None)
+
+            if request_entry:
+                if action == 'approve':
+                    flash(f"✅ Approved request {req_id} for {request_entry['employee']}")
+                    write_audit_log("HR_APPROVE", session['username'], f"Approved: {request_entry}")
+                    write_hr_action_log("APPROVED", session['username'], request_entry)
+                elif action == 'deny':
+                    flash(f"❌ Denied request {req_id} for {request_entry['employee']}")
+                    write_audit_log("HR_DENY", session['username'], f"Denied: {request_entry}")
+                    write_hr_action_log("DENIED", session['username'], request_entry)
+
+                # Remove the request from the list *after* using it
+                pending_requests = [r for r in pending_requests if r['id'] != request_entry['id']]
 
     return render_template('hr_approvals.html', requests=pending_requests)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
