@@ -82,10 +82,5 @@ See the [Wiki](https://github.com/Brrivera08/S25_CSS_G2_BR_SL/wiki) for:
 - @aamata1  
 - Group 2 – S25 CSS Class
 
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 
