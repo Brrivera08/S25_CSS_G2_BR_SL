@@ -259,6 +259,12 @@ def set_new_password():
 
     return render_template('set_new_password.html')
 
+@app.route('/hr_home')
+def hr_home():
+    if session.get('username') != 'HRManager':
+        return redirect(url_for('login'))
+    return render_template('hr_home.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
