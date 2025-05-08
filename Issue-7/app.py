@@ -160,5 +160,32 @@ def reset_password():
             message = "Please enter your email."
     return render_template('reset_password.html', message=message)
 
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    message = None
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if email:
+            session['reset_email'] = email
+            session['reset_code'] = '123456'  # Example code
+            print(f"[Email Simulation] Sending code 123456 to {email}")
+            return redirect(url_for('verify_reset_code'))
+        else:
+            message = "Please enter your email."
+    return render_template('reset_password.html', message=message)
+
+@app.route('/verify_reset_code', methods=['GET', 'POST'])
+def verify_reset_code():
+    error = None
+    if request.method == 'POST':
+        code = request.form.get('code')
+        if code == session.get('reset_code'):
+            session.pop('reset_code', None)
+            return redirect(url_for('set_new_password'))
+        else:
+            error = "Incorrect verification code."
+    return render_template('verify_reset_code.html', error=error)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
