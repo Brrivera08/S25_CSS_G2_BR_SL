@@ -213,16 +213,17 @@ def validate_temp():
 
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
+    message = None
     if request.method == 'POST':
-        new_password = request.form.get('new_password')
-        if not new_password:
-            return "Missing password field", 400
-
-        username = session.get('username', 'unknown_user')
-        log_password_change(username)
-        return redirect(url_for('login'))
-
-    return render_template('reset_password.html')
+        email = request.form.get('email')
+        if email:
+            session['reset_email'] = email
+            session['reset_code'] = '123456'  # Example code
+            print(f"[Email Simulation] Sending code 123456 to {email}")
+            return redirect(url_for('verify_reset_code'))
+        else:
+            message = "Please enter your email."
+    return render_template('reset_password.html', message=message)
 
 @app.route('/verify_reset_code', methods=['GET', 'POST'])
 def verify_reset_code():
@@ -249,12 +250,6 @@ def set_new_password():
         message = "Your password has been updated. Please log in."
         return render_template('login.html', error=message)
     return render_template('set_new_password.html')
-
-def log_password_change(username, filename='password_change_log.txt'):
-    log_path = os.path.join(os.path.dirname(__file__), filename)
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    with open(log_path, 'a') as log_file:
-        log_file.write(f"[{timestamp}] Password changed for user: {username}\n")
 
 if __name__ == '__main__':
     app.run(debug=True)
