@@ -136,9 +136,10 @@ def success():
         return redirect(url_for('login'))
 
     if username == 'HRManager':
-        return redirect(url_for('hr_dashboard'))
+        return redirect(url_for('hr_home'))
 
     return render_template('success.html', username=username)
+
 
 def alerts():
     if session.get('username') != 'admin':
@@ -264,7 +265,6 @@ def hr_home():
     if session.get('username') != 'HRManager':
         return redirect(url_for('login'))
     return render_template('hr_home.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
