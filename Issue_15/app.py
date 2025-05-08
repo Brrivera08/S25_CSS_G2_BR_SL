@@ -265,7 +265,11 @@ def set_new_password():
 def hr_home():
     if session.get('username') != 'HRManager':
         return redirect(url_for('login'))
-    return render_template('hr_home.html')
+
+    pending_requests = get_pending_requests() 
+
+    return render_template('hr_home.html', pending_requests=pending_requests)
+
 
 # Sample requests
 pending_requests = [
