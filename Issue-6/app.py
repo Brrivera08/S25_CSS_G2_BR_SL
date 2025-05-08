@@ -103,27 +103,36 @@ def success():
 
     return render_template('success.html', username=username)
 
-
 @app.route('/hr_dashboard', methods=['GET', 'POST'])
 def hr_dashboard():
     if session.get('username') != 'HRManager':
         return redirect(url_for('login'))
 
+    global temp_users  # make sure you can update the temp_users dictionary
+    message = None
+
     if request.method == 'POST':
-    new_user = request.form['new_user']
-    new_pass = request.form['new_pass']
-    access_level = request.form['access_level']
-    duration = int(request.form['duration'])
+        try:
+            new_user = request.form['new_user'].strip()
+            new_pass = request.form['new_pass'].strip()
+            access_level = int(request.form['access_level'])
+            duration = int(request.form['duration'])
 
-    expiry = datetime.now() + timedelta(minutes=duration)
-    temp_users[new_user] = {
-        'password': new_pass,
-        'access_level': access_level,
-        'expires_at': expiry.strftime('%Y-%m-%d %H:%M:%S')
-    }
+            if not (1 <= access_level <= 5):
+                raise ValueError("Invalid access level")
 
-    message = f"Temporary user '{new_user}' created with Access Level {access_level}, expires at {expiry.strftime('%Y-%m-%d %H:%M:%S')}."
+            expiry = datetime.now() + timedelta(minutes=duration)
 
+            temp_users[new_user] = {
+                'password': new_pass,
+                'access_level': access_level,
+                'expires_at': expiry.strftime('%Y-%m-%d %H:%M:%S')
+            }
+
+            message = f"Temporary user '{new_user}' created with Access Level {access_level}, expires at {expiry.strftime('%Y-%m-%d %H:%M:%S')}."
+
+        except (KeyError, ValueError) as e:
+            message = f"Error processing request: {str(e)}"
 
     return render_template('hr_dashboard.html', temp_users=temp_users, message=message)
 
