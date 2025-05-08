@@ -109,14 +109,21 @@ def hr_dashboard():
     if session.get('username') != 'HRManager':
         return redirect(url_for('login'))
 
-    message = None
     if request.method == 'POST':
-        new_user = request.form['new_user']
-        new_pass = request.form['new_pass']
-        duration = int(request.form['duration'])
-        expiry = datetime.now() + timedelta(minutes=duration)
-        temp_users[new_user] = {'password': new_pass, 'expires_at': expiry}
-        message = f"Temporary user '{new_user}' created. Expires at {expiry.strftime('%Y-%m-%d %H:%M:%S')}."
+    new_user = request.form['new_user']
+    new_pass = request.form['new_pass']
+    access_level = request.form['access_level']
+    duration = int(request.form['duration'])
+
+    expiry = datetime.now() + timedelta(minutes=duration)
+    temp_users[new_user] = {
+        'password': new_pass,
+        'access_level': access_level,
+        'expires_at': expiry.strftime('%Y-%m-%d %H:%M:%S')
+    }
+
+    message = f"Temporary user '{new_user}' created with Access Level {access_level}, expires at {expiry.strftime('%Y-%m-%d %H:%M:%S')}."
+
 
     return render_template('hr_dashboard.html', temp_users=temp_users, message=message)
 
