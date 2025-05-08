@@ -49,9 +49,9 @@ def login():
         password = request.form['password']
         if username in users and users[username] == password:
             session['username'] = username
-            code = '123456'  # Fixed 2FA code for demo
+            code = '123456'  
             session['2fa_code'] = code
-            print(f"[2FA] Code for {username}: {code}")  # Still print it for visibility
+            print(f"[2FA] Code for {username}: {code}")  
             return redirect(url_for('verify'))
         else:
             error = "Invalid username or password"
