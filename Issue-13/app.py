@@ -251,5 +251,11 @@ def set_new_password():
         return render_template('login.html', error=message)
     return render_template('set_new_password.html')
 
+def log_password_change(username, filename='password_change_log.txt'):
+    log_path = os.path.join(os.path.dirname(__file__), filename)
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    with open(log_path, 'a') as log_file:
+        log_file.write(f"[{timestamp}] Password changed for user: {username}\n")
+
 if __name__ == '__main__':
     app.run(debug=True)
