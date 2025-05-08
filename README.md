@@ -75,18 +75,6 @@ See the [Wiki](https://github.com/Brrivera08/S25_CSS_G2_BR_SL/wiki) for:
 
 ---
 
-## 🤝 Contributing
-
-1. Fork the repository  
-2. Create a new branch: `git checkout -b feature-name`  
-3. Commit your changes  
-4. Push to your fork  
-5. Open a pull request with details
-
-All code should follow best practices for security and be well-documented.
-
----
-
 ## 👥 Authors
 
 - @Brrivera08  
