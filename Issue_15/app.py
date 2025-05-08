@@ -261,6 +261,10 @@ def set_new_password():
 
     return render_template('set_new_password.html')
 
+def get_pending_requests():
+    # This is just an example; you should replace this with actual logic
+    return [request for request in pending_requests if request['status'] == 'pending']
+
 @app.route('/hr_home')
 def hr_home():
     if session.get('username') != 'HRManager':
