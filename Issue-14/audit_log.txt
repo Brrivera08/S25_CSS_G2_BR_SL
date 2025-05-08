@@ -1,4 +1,0 @@
-[2025-05-07 23:59:13] [LOGIN] user: HRManager - Successful login
-[2025-05-08 00:00:02] [HR_APPROVE] user: HRManager - Approved: {'id': 1, 'employee': 'alice', 'type': 'Access Level Increase', 'details': 'Requesting level 3 access'}
-[2025-05-08 00:00:15] [HR_DENY] user: HRManager - Denied: {'id': 2, 'employee': 'bob', 'type': 'Time Extension', 'details': 'Extend temporary access by 1 hour'}
-[2025-05-08 00:00:38] [HR_APPROVE] user: HRManager - Approved: {'id': 3, 'employee': 'charlie', 'type': 'Reinstatement', 'details': 'Reinstate account after offboarding'}
