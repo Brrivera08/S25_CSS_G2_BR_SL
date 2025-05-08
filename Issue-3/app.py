@@ -45,24 +45,18 @@ def login():
     error = None
     if request.method == 'POST':
         users = load_users()
-        hr_status = load_hr_status()
         username = request.form['username']
         password = request.form['password']
-        
-        if username in hr_status and hr_status[username] == "offboarded":
-            error = "Access denied: user is offboarded."
-            log_event(f"LOGIN BLOCKED for offboarded user '{username}'")
-            return render_template('login.html', error=error)
-        
         if username in users and users[username] == password:
             session['username'] = username
-            code = str(random.randint(100000, 999999))
+            code = '123456'  # Fixed 2FA code for demo
             session['2fa_code'] = code
-            print(f"[2FA] Code for {username}: {code}")
+            print(f"[2FA] Code for {username}: {code}")  # Still print it for visibility
             return redirect(url_for('verify'))
         else:
             error = "Invalid username or password"
     return render_template('login.html', error=error)
+
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
