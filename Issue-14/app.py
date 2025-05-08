@@ -32,6 +32,12 @@ def write_password_change_log(username, details=""):
     with open(path, 'a') as file:
         file.write(f"[{timestamp}] [PASSWORD_RESET] user: {username} - {details}\n")
 
+def write_hr_action_log(action_type, hr_user, request_entry):
+    path = os.path.join(os.path.dirname(__file__), 'hr_actions_log.txt')
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(path, 'a') as file:
+        file.write(f"[{timestamp}] [{action_type}] HR: {hr_user} - Request: {request_entry}\n")
+
 def load_users(filename='users.txt'):
     path = os.path.join(os.path.dirname(__file__), filename)
     users = {}
@@ -296,7 +302,6 @@ def hr_approvals():
             pending_requests = [r for r in pending_requests if r['id'] != req_id]
 
     return render_template('hr_approvals.html', requests=pending_requests)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
