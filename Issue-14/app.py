@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime, timedelta
 from collections import defaultdict
 import os
+from flask import flash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -266,11 +267,36 @@ def hr_home():
         return redirect(url_for('login'))
     return render_template('hr_home.html')
 
-@app.route('/hr_approvals')
+# Sample requests 
+pending_requests = [
+    {'id': 1, 'employee': 'alice', 'type': 'Access Level Increase', 'details': 'Requesting level 3 access'},
+    {'id': 2, 'employee': 'bob', 'type': 'Time Extension', 'details': 'Extend temporary access by 1 hour'},
+    {'id': 3, 'employee': 'charlie', 'type': 'Reinstatement', 'details': 'Reinstate account after offboarding'}
+]
+
+@app.route('/hr_approvals', methods=['GET', 'POST'])
 def hr_approvals():
     if session.get('username') != 'HRManager':
         return redirect(url_for('login'))
-    return render_template('hr_approvals.html')
+
+    global pending_requests
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        req_id = int(request.form.get('request_id'))
+
+        request_entry = next((r for r in pending_requests if r['id'] == req_id), None)
+        if request_entry:
+            if action == 'approve':
+                flash(f"✅ Approved request {req_id} for {request_entry['employee']}")
+                write_audit_log("HR_APPROVE", session['username'], f"Approved: {request_entry}")
+            elif action == 'deny':
+                flash(f"❌ Denied request {req_id} for {request_entry['employee']}")
+                write_audit_log("HR_DENY", session['username'], f"Denied: {request_entry}")
+            pending_requests = [r for r in pending_requests if r['id'] != req_id]
+
+    return render_template('hr_approvals.html', requests=pending_requests)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
