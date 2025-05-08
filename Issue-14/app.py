@@ -290,8 +290,9 @@ def hr_approvals():
         req_id = request.form.get('req_id')
         action = request.form.get('action')
 
+        print(f"Received request ID: {req_id}, Action: {action}")  # Debugging line
+
         if req_id and action:
-            # Find the request by ID
             request_entry = next((r for r in pending_requests if r['id'] == req_id), None)
 
             if request_entry:
@@ -308,6 +309,7 @@ def hr_approvals():
                 pending_requests = [r for r in pending_requests if r['id'] != request_entry['id']]
 
     return render_template('hr_approvals.html', requests=pending_requests)
+
 
 
 if __name__ == '__main__':
