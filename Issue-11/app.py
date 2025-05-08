@@ -127,6 +127,37 @@ def success():
 
     return render_template('success.html', username=username)
 
+@app.route('/alerts', methods=['GET', 'POST'])
+def alerts():
+    if session.get('username') != 'admin':
+        return redirect(url_for('login'))
+
+    log_path = os.path.join(os.path.dirname(__file__), 'logs.txt')
+    alerts = []
+
+    # Load alerts from logs.txt
+    if os.path.exists(log_path):
+        with open(log_path, 'r') as file:
+            for line in file:
+                if '[ALERT]' in line:
+                    parts = line.strip().split('] ', 2)
+                    timestamp = parts[0].replace('[', '')
+                    message = parts[-1].replace('[ALERT] ', '')
+                    reviewed = '[REVIEWED]' in line
+                    alerts.append({
+                        'timestamp': timestamp,
+                        'message': message.replace('[REVIEWED]', '').strip(),
+                        'reviewed': reviewed
+                    })
+
+    # Handle POST to mark alert as reviewed (simulated in memory)
+    if request.method == 'POST':
+        index = int(request.form['reviewed'])
+        alerts[index]['reviewed'] = True
+        # Optionally: update file here (advanced version)
+
+    return render_template('alerts.html', alerts=alerts)
+
 @app.route('/hr_dashboard', methods=['GET', 'POST'])
 def hr_dashboard():
     if session.get('username') != 'HRManager':
