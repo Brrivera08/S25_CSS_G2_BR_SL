@@ -213,17 +213,18 @@ def validate_temp():
 
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
-    message = None
     if request.method == 'POST':
-        email = request.form.get('email')
-        if email:
-            session['reset_email'] = email
-            session['reset_code'] = '123456'  # Example code
-            print(f"[Email Simulation] Sending code 123456 to {email}")
-            return redirect(url_for('verify_reset_code'))
-        else:
-            message = "Please enter your email."
-    return render_template('reset_password.html', message=message)
+        new_password = request.form['new_password']
+
+        # Example: assume username is stored in session
+        username = session.get('username', 'unknown_user')
+
+        # Log the change
+        log_password_change(username)
+
+        return redirect(url_for('login'))  # or success page
+    return render_template('reset_password.html')
+
 
 @app.route('/verify_reset_code', methods=['GET', 'POST'])
 def verify_reset_code():
