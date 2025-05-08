@@ -154,18 +154,6 @@ def reset_password():
     if request.method == 'POST':
         email = request.form.get('email')
         if email:
-            # You could add email validation here and handle real password reset.
-            message = f"If an account is associated with {email}, a password reset link has been sent."
-        else:
-            message = "Please enter your email."
-    return render_template('reset_password.html', message=message)
-
-@app.route('/reset_password', methods=['GET', 'POST'])
-def reset_password():
-    message = None
-    if request.method == 'POST':
-        email = request.form.get('email')
-        if email:
             session['reset_email'] = email
             session['reset_code'] = '123456'  # Example code
             print(f"[Email Simulation] Sending code 123456 to {email}")
@@ -198,7 +186,6 @@ def set_new_password():
         message = "Your password has been updated. Please log in."
         return render_template('login.html', error=message)
     return render_template('set_new_password.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
