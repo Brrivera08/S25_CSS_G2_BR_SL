@@ -211,8 +211,8 @@ def validate_temp():
         return f"Temp login success for {user}"
     return "Temp login failed or expired"
 
-@app.route('/reset_password_request', methods=['GET', 'POST'])
-def reset_password_request():
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
     if request.method == 'POST':
         email = request.form.get('email')
         if not email:
@@ -224,7 +224,7 @@ def reset_password_request():
         print(f"[DEBUG] Sent code 123456 to {email}")
         return redirect(url_for('verify_reset_code'))
 
-    return render_template('reset_password_request.html')
+    return render_template('reset_password.html')
 
 @app.route('/verify_reset_code', methods=['GET', 'POST'])
 def verify_reset_code():
