@@ -1,11 +1,23 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime, timedelta
+from collections import defaultdict
 import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 temp_users = {}
+
+# Track failed login attempts
+failed_logins = defaultdict(int)
+
+def log_alert(message, filename='logs.txt'):
+    path = os.path.join(os.path.dirname(__file__), filename)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    alert_message = f"[{timestamp}] [ALERT] {message}"
+    print(alert_message)
+    with open(path, 'a') as file:
+        file.write(alert_message + "\n")
 
 def load_users(filename='users.txt'):
     path = os.path.join(os.path.dirname(__file__), filename)
@@ -55,14 +67,26 @@ def login():
         users = load_users()
         username = request.form['username']
         password = request.form['password']
+        hr_status = load_hr_status()
+
+        # Deny access for offboarded users
+        if username in hr_status and hr_status[username] == "offboarded":
+            error = "Access denied: user is offboarded."
+            log_alert(f"Blocked login attempt for OFFBOARDED user '{username}'")
+            return render_template('login.html', error=error)
+
         if username in users and users[username] == password:
+            failed_logins[username] = 0  # reset counter
             session['username'] = username
-            code = '123456' 
+            code = '123456'
             session['2fa_code'] = code
-            print(f"[2FA] Code for {username}: {code}") 
+            print(f"[2FA] Code for {username}: {code}")
             return redirect(url_for('verify'))
         else:
+            failed_logins[username] += 1
             error = "Invalid username or password"
+            if failed_logins[username] >= 3:
+                log_alert(f"Suspicious login pattern: 3+ failed attempts for user '{username}'")
     return render_template('login.html', error=error)
 
 @app.route('/verify', methods=['GET', 'POST'])
