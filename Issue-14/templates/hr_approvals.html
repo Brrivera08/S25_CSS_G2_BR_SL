@@ -2,9 +2,56 @@
 <html>
 <head>
     <title>Employee Request Approvals</title>
+    <style>
+        table { width: 80%; border-collapse: collapse; margin: 20px auto; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+        form { display: inline; }
+        .flash { color: green; font-weight: bold; text-align: center; }
+    </style>
 </head>
 <body>
-    <h1>Employee Request Approvals</h1>
-    <p>This is a placeholder for the new dashboard where requests will be listed.</p>
+    <h1 style="text-align:center;">Employee Request Approvals</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <p class="flash">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if requests %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employee</th>
+                <th>Request Type</th>
+                <th>Details</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.id }}</td>
+                <td>{{ req.employee }}</td>
+                <td>{{ req.type }}</td>
+                <td>{{ req.details }}</td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="request_id" value="{{ req.id }}">
+                        <button type="submit" name="action" value="approve">Approve</button>
+                        <button type="submit" name="action" value="deny">Deny</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center;">✅ No pending requests at the moment.</p>
+    {% endif %}
+
 </body>
 </html>
