@@ -4,6 +4,8 @@ import os, random, datetime
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+temp_users = {}
+
 def load_users(filename='users.txt'):
     path = os.path.join(os.path.dirname(__file__), filename)
     users = {}
@@ -95,6 +97,34 @@ def success():
         return redirect(url_for('login'))
 
     return render_template('success.html', username=username)
+
+@app.route('/hr_dashboard', methods=['GET', 'POST'])
+def hr_dashboard():
+    if session.get('username') != 'HRManager':
+        return redirect(url_for('login'))
+
+    message = None
+    if request.method == 'POST':
+        new_user = request.form['new_user']
+        new_pass = request.form['new_pass']
+        duration = int(request.form['duration'])
+        expiry = datetime.now() + timedelta(minutes=duration)
+        temp_users[new_user] = {'password': new_pass, 'expires_at': expiry}
+        message = f"Temporary user '{new_user}' created. Expires at {expiry.strftime('%Y-%m-%d %H:%M:%S')}."
+
+    return render_template('hr_dashboard.html', temp_users=temp_users, message=message)
+
+@app.route('/validate_temp', methods=['POST'])
+def validate_temp():
+    data = request.form
+    user = data['username']
+    password = data['password']
+    user_data = temp_users.get(user)
+    now = datetime.now()
+
+    if user_data and user_data['password'] == password and user_data['expires_at'] > now:
+        return f"Temp login success for {user}"
+    return "Temp login failed or expired"
 
 if __name__ == '__main__':
     app.run(debug=True)
