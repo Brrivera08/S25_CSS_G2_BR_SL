@@ -1240,3 +1240,10 @@ documentation
 workflow
 
 Assignees:
+
+_______________________________________________________________
+
+Diagrams to explain:
+
+![ee1329a9-b44c-4c96-ab17-ba27cb1f4501](https://github.com/user-attachments/assets/15d8ac18-7e5d-4c5a-8014-31d4584202a6)
+
