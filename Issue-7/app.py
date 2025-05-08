@@ -186,6 +186,19 @@ def verify_reset_code():
             error = "Incorrect verification code."
     return render_template('verify_reset_code.html', error=error)
 
+@app.route('/set_new_password', methods=['GET', 'POST'])
+def set_new_password():
+    message = None
+    if request.method == 'POST':
+        new_password = request.form.get('new_password')
+        email = session.get('reset_email')
+        # You would update the user's password in the real database here
+        print(f"[Simulation] Password for {email} changed to: {new_password}")
+        session.pop('reset_email', None)
+        message = "Your password has been updated. Please log in."
+        return render_template('login.html', error=message)
+    return render_template('set_new_password.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
