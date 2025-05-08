@@ -19,6 +19,12 @@ def log_alert(message, filename='logs.txt'):
     with open(path, 'a') as file:
         file.write(alert_message + "\n")
 
+def write_audit_log(event_type, username, details=""):
+    path = os.path.join(os.path.dirname(__file__), 'audit_log.txt')
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(path, 'a') as file:
+        file.write(f"[{timestamp}] [{event_type}] user: {username} - {details}\n")
+
 def load_users(filename='users.txt'):
     path = os.path.join(os.path.dirname(__file__), filename)
     users = {}
