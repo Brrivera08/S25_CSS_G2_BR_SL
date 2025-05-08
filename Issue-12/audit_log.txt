@@ -1,2 +1,2 @@
 [2025-05-07 22:33:39] [LOGIN] user: admin - Successful login
-[2025-05-07 22:55:16] [PASSWORD_RESET] user: email@example.com - Password was updated
+[2025-05-07 23:02:33] [LOGIN] user: admin - Successful login

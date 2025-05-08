@@ -213,18 +213,17 @@ def validate_temp():
 
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
+    message = None
     if request.method == 'POST':
         email = request.form.get('email')
-        if not email:
-            return "Missing email", 400
-
-        # Simulate sending verification code
-        session['reset_email'] = email
-        session['reset_code'] = '123456'  # Static for testing
-        print(f"[DEBUG] Sent code 123456 to {email}")
-        return redirect(url_for('verify_reset_code'))
-
-    return render_template('reset_password.html')
+        if email:
+            session['reset_email'] = email
+            session['reset_code'] = '123456'  # Example code
+            print(f"[Email Simulation] Sending code 123456 to {email}")
+            return redirect(url_for('verify_reset_code'))
+        else:
+            message = "Please enter your email."
+    return render_template('reset_password.html', message=message)
 
 @app.route('/verify_reset_code', methods=['GET', 'POST'])
 def verify_reset_code():
@@ -240,17 +239,16 @@ def verify_reset_code():
 
 @app.route('/set_new_password', methods=['GET', 'POST'])
 def set_new_password():
+    message = None
     if request.method == 'POST':
         new_password = request.form.get('new_password')
         email = session.get('reset_email')
-        if not new_password:
-            return "Missing password field", 400
-
+        # You would update the user's password in the real database here
         print(f"[Simulation] Password for {email} changed to: {new_password}")
         write_audit_log("PASSWORD_RESET", email, "Password was updated")
         session.pop('reset_email', None)
-        return render_template('login.html', error="Your password has been updated.")
-
+        message = "Your password has been updated. Please log in."
+        return render_template('login.html', error=message)
     return render_template('set_new_password.html')
 
 if __name__ == '__main__':
