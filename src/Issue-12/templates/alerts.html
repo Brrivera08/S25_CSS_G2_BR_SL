@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alert Management Dashboard</title>
+</head>
+<body>
+    <h2>⚠️ Alert Management Dashboard</h2>
+
+    {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+
+    {% if alerts %}
+        <form method="POST" action="{{ url_for('alerts') }}">
+            <table border="1" cellpadding="8">
+                <tr>
+                    <th>#</th>
+                    <th>Timestamp</th>
+                    <th>Alert Message</th>
+                    <th>Action</th>
+                </tr>
+                {% for idx, alert in enumerate(alerts) %}
+                    <tr>
+                        <td>{{ idx + 1 }}</td>
+                        <td>{{ alert.timestamp }}</td>
+                        <td>{{ alert.message }}</td>
+                        <td>
+                            {% if not alert.reviewed %}
+                                <button name="reviewed" value="{{ idx }}">Mark as Reviewed</button>
+                            {% else %}
+                                ✅ Reviewed
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    {% else %}
+        <p>No alerts found.</p>
+    {% endif %}
+
+    <p><a href="{{ url_for('login') }}">Back to Login</a></p>
+</body>
+</html>
