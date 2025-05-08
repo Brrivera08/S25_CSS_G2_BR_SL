@@ -7,6 +7,28 @@ app.secret_key = 'your_secret_key'
 
 temp_users = {}
 
+limiter = Limiter(get_remote_address, app=app, default_limits=["200 per day", "50 per hour"])
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+@limiter.limit("5 per hour", override_defaults=False)
+def reset_password():
+    message = None
+    if request.method == 'POST':
+        email = request.form.get('email')
+        captcha = request.form.get('captcha')
+
+        if captcha != '5':
+            message = "CAPTCHA validation failed."
+        elif email:
+            session['reset_email'] = email
+            session['reset_code'] = '123456'  # Example reset code
+            print(f"[Email Simulation] Sending code 123456 to {email}")
+            return redirect(url_for('verify_reset_code'))
+        else:
+            message = "Please enter your email."
+    return render_template('reset_password.html', message=message)
+
+
 def load_users(filename='users.txt'):
     path = os.path.join(os.path.dirname(__file__), filename)
     users = {}
