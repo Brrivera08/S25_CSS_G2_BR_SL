@@ -214,17 +214,15 @@ def validate_temp():
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     if request.method == 'POST':
-        new_password = request.form['new_password']
+        new_password = request.form.get('new_password')
+        if not new_password:
+            return "Missing password field", 400
 
-        # Example: assume username is stored in session
         username = session.get('username', 'unknown_user')
-
-        # Log the change
         log_password_change(username)
+        return redirect(url_for('login'))
 
-        return redirect(url_for('login'))  # or success page
     return render_template('reset_password.html')
-
 
 @app.route('/verify_reset_code', methods=['GET', 'POST'])
 def verify_reset_code():
