@@ -84,6 +84,7 @@ def login():
         if username in users and users[username] == password:
             failed_logins[username] = 0  # reset counter
             session['username'] = username
+            write_audit_log("LOGIN", username, "Successful login")
             code = '123456'
             session['2fa_code'] = code
             print(f"[2FA] Code for {username}: {code}")
@@ -189,6 +190,8 @@ def hr_dashboard():
                 'expires_at': expiry.strftime('%Y-%m-%d %H:%M:%S')
             }
 
+            write_audit_log("ROLE_ASSIGN", session['username'], f"Gave temporary access to '{new_user}' (level {access_level}, {duration} mins)")
+
             message = f"Temporary user '{new_user}' created with Access Level {access_level}, expires at {expiry.strftime('%Y-%m-%d %H:%M:%S')}."
 
         except (KeyError, ValueError) as e:
@@ -242,6 +245,7 @@ def set_new_password():
         email = session.get('reset_email')
         # You would update the user's password in the real database here
         print(f"[Simulation] Password for {email} changed to: {new_password}")
+        write_audit_log("PASSWORD_RESET", email, "Password was updated")
         session.pop('reset_email', None)
         message = "Your password has been updated. Please log in."
         return render_template('login.html', error=message)
