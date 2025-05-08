@@ -226,17 +226,7 @@ def reset_password_request():
 
     return render_template('reset_password_request.html')
 
-@app.route('/verify_reset_code', methods=['GET', 'POST'])
-def verify_reset_code():
-    error = None
-    if request.method == 'POST':
-        code = request.form.get('code')
-        if code == session.get('reset_code'):
-            session.pop('reset_code', None)
-            return redirect(url_for('set_new_password'))
-        else:
-            error = "Incorrect verification code."
-    return render_template('verify_reset_code.html', error=error)
+
 
 @app.route('/set_new_password', methods=['GET', 'POST'])
 def set_new_password():
