@@ -1,51 +1,52 @@
 ---
 name: 🐞 Bug Report
 about: Report unexpected behavior, errors, or system flaws
-title: "[Bug] Descriptive title"
-labels: bug, needs-triage
-assignees: ''
+title: "[Bug] 2FA code not required after successful login"
+labels: bug, security
+assignees: @slackey369
 ---
 
 ## 🐛 Description
 
-<!-- A clear and concise description of the bug -->
+After entering the correct username and password, the system redirects users directly to `success.html` without prompting for a second authentication factor (2FA code), bypassing the intended MFA process.
 
 ## ✅ Expected Behavior
 
-<!-- What did you expect to happen? -->
+After verifying username and password, the system should present a second screen requesting the 6-digit verification code. Only upon successful code entry should the user be granted access.
 
 ## ❌ Actual Behavior
 
-<!-- What actually happened? Include error messages, screenshots, or logs -->
+Users are redirected to the success page after entering valid credentials without ever seeing the 2FA prompt. This creates a significant security vulnerability by bypassing the second factor entirely.
 
 ## 🧪 Steps to Reproduce
 
-1. Go to `...`
-2. Click on `...`
-3. Enter `...`
-4. Submit `...`
-5. See error `...`
+1. Run `app.py` and navigate to `/login`
+2. Enter valid credentials for a test user (e.g., `seth@uiw.edu` / `testpass`)
+3. Click "Login"
+4. Observe that no 2FA prompt is shown, and user is redirected to `success.html`
 
 ## 💻 Environment Details
 
-- OS: [e.g., Windows 11, macOS Sonoma]
-- Browser (if applicable): [e.g., Chrome 122, Safari]
-- Python version: [e.g., 3.11.3]
-- Flask version: [e.g., 2.3.x]
-- Frontend page/route: [e.g., /login, /reset]
+- OS: macOS Ventura 13.5
+- Browser: Chrome 124.0
+- Python: 3.11.4
+- Flask: 2.3.3
+- Route: `/login` and `/verify-code` (not triggered)
 
 ## 📂 Impacted Files or Modules
 
-<!-- List of relevant files or features, e.g., app.py, login.html -->
+- `app.py`
+- `verify_code.html`
+- Possibly `session` or `redirect` logic
 
 ## 🔐 Security Impact
 
 - [ ] None
 - [ ] Low (e.g., cosmetic issue)
-- [ ] Medium (e.g., bypassed access check)
-- [ ] High (e.g., data exposure or privilege escalation)
+- [ ] Medium (e.g., bypassed minor validation)
+- [x] High (e.g., critical MFA bypass or privilege escalation)
 
 ## 📝 Additional Context
 
-<!-- Add anything else that might be relevant, such as recent changes or dependencies -->
+This may be due to conditional logic skipping the `verify_code` page. We should check whether `session["authenticated"]` is being set too early in the flow.
 
