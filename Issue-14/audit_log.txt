@@ -1,8 +1,0 @@
-[2025-05-07 22:33:39] [LOGIN] user: admin - Successful login
-[2025-05-07 22:55:16] [PASSWORD_RESET] user: email@example.com - Password was updated
-[2025-05-07 23:22:11] [LOGIN] user: HRManager - Successful login
-[2025-05-07 23:25:26] [HR_APPROVE] user: HRManager - Approved: {'id': 1, 'employee': 'alice', 'type': 'Access Level Increase', 'details': 'Requesting level 3 access'}
-[2025-05-07 23:25:28] [HR_DENY] user: HRManager - Denied: {'id': 2, 'employee': 'bob', 'type': 'Time Extension', 'details': 'Extend temporary access by 1 hour'}
-[2025-05-07 23:25:32] [HR_DENY] user: HRManager - Denied: {'id': 3, 'employee': 'charlie', 'type': 'Reinstatement', 'details': 'Reinstate account after offboarding'}
-[2025-05-07 23:30:36] [LOGIN] user: HRManager - Successful login
-[2025-05-07 23:32:55] [LOGIN] user: HRManager - Successful login

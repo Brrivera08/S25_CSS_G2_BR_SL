@@ -32,12 +32,6 @@ def write_password_change_log(username, details=""):
     with open(path, 'a') as file:
         file.write(f"[{timestamp}] [PASSWORD_RESET] user: {username} - {details}\n")
 
-def write_hr_action_log(action_type, hr_user, request_entry):
-    path = os.path.join(os.path.dirname(__file__), 'hr_actions_log.txt')
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(path, 'a') as file:
-        file.write(f"[{timestamp}] [{action_type}] HR: {hr_user} - Request: {request_entry}\n")
-
 def load_users(filename='users.txt'):
     path = os.path.join(os.path.dirname(__file__), filename)
     users = {}
@@ -273,7 +267,7 @@ def hr_home():
         return redirect(url_for('login'))
     return render_template('hr_home.html')
 
-# Sample requests 
+# Sample requests
 pending_requests = [
     {'id': 1, 'employee': 'alice', 'type': 'Access Level Increase', 'details': 'Requesting level 3 access'},
     {'id': 2, 'employee': 'bob', 'type': 'Time Extension', 'details': 'Extend temporary access by 1 hour'},
@@ -286,31 +280,22 @@ def hr_approvals():
         return redirect(url_for('login'))
 
     global pending_requests
+
     if request.method == 'POST':
-        req_id = request.form.get('req_id')
         action = request.form.get('action')
+        req_id = int(request.form.get('request_id'))
 
-        print(f"Received request ID: {req_id}, Action: {action}")  # Debugging line
-
-        if req_id and action:
-            request_entry = next((r for r in pending_requests if r['id'] == req_id), None)
-
-            if request_entry:
-                if action == 'approve':
-                    flash(f"✅ Approved request {req_id} for {request_entry['employee']}")
-                    write_audit_log("HR_APPROVE", session['username'], f"Approved: {request_entry}")
-                    write_hr_action_log("APPROVED", session['username'], request_entry)
-                elif action == 'deny':
-                    flash(f"❌ Denied request {req_id} for {request_entry['employee']}")
-                    write_audit_log("HR_DENY", session['username'], f"Denied: {request_entry}")
-                    write_hr_action_log("DENIED", session['username'], request_entry)
-
-                # Remove the request from the list *after* using it
-                pending_requests = [r for r in pending_requests if r['id'] != request_entry['id']]
+        request_entry = next((r for r in pending_requests if r['id'] == req_id), None)
+        if request_entry:
+            if action == 'approve':
+                flash(f"✅ Approved request {req_id} for {request_entry['employee']}")
+                write_audit_log("HR_APPROVE", session['username'], f"Approved: {request_entry}")
+            elif action == 'deny':
+                flash(f"❌ Denied request {req_id} for {request_entry['employee']}")
+                write_audit_log("HR_DENY", session['username'], f"Denied: {request_entry}")
+            pending_requests = [r for r in pending_requests if r['id'] != req_id]
 
     return render_template('hr_approvals.html', requests=pending_requests)
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
