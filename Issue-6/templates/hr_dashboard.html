@@ -1,16 +1,48 @@
 <h2>HR Manager Dashboard</h2>
-{% if message %}<p style="color:green;">{{ message }}</p>{% endif %}
 
+{% if message %}
+  <p style="color:green;">{{ message }}</p>
+{% endif %}
+
+<!-- Search Bar -->
+<input type="text" id="searchBox" placeholder="Search users..." onkeyup="filterUsers()">
+
+<!-- Form to Add Temporary User -->
 <form method="POST">
-  <input name="new_user" placeholder="Temporary Username" required>
+  <input name="new_user" id="new_user_input" placeholder="Temporary Username" required>
+
   <input name="new_pass" placeholder="Temporary Password" required>
+
+  <label for="access_level">Access Level:</label>
+  <select name="access_level" id="access_level" required>
+    <option value="">Select Level</option>
+    {% for level in range(1, 6) %}
+      <option value="{{ level }}">Level {{ level }}</option>
+    {% endfor %}
+  </select>
+
   <input name="duration" type="number" placeholder="Duration (minutes)" min="1" required>
   <button type="submit">Create Temporary Account</button>
 </form>
 
+<!-- Active Users -->
 <h3>Active Temporary Users:</h3>
-<ul>
-  {% for user, expires in temp_users.items() %}
-    <li>{{ user }} - expires at {{ expires }}</li>
+<ul id="userList">
+  {% for user, data in temp_users.items() %}
+    <li>
+      {{ user }} – Access Level {{ data.access_level }} – Expires at {{ data.expires_at }}
+    </li>
   {% endfor %}
 </ul>
+
+<!-- JavaScript to filter users -->
+<script>
+function filterUsers() {
+  const input = document.getElementById("searchBox").value.toLowerCase();
+  const users = document.getElementById("userList").getElementsByTagName("li");
+  for (let i = 0; i < users.length; i++) {
+    const name = users[i].textContent.toLowerCase();
+    users[i].style.display = name.includes(input) ? "" : "none";
+  }
+}
+</script>
