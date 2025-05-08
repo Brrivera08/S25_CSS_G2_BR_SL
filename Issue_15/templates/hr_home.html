@@ -1,0 +1,15 @@
+<!-- templates/hr_home.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Home</title>
+</head>
+<body>
+    <h1>Welcome, HR Manager</h1>
+    <p>Please choose an action:</p>
+    <ul>
+        <li><a href="{{ url_for('hr_dashboard') }}">Go to HR Dashboard (Temporary Access)</a></li>
+        <li><a href="{{ url_for('hr_approvals') }}">Go to Employee Request Approvals</a></li>
+    </ul>
+</body>
+</html>

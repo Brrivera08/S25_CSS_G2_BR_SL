@@ -1,0 +1,6 @@
+<h2>Enter Verification Code</h2>
+<form method="POST">
+  <input type="text" name="code" placeholder="Enter the code sent to your email" required>
+  <button type="submit">Verify</button>
+</form>
+{% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
