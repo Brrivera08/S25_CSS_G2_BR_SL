@@ -75,6 +75,10 @@ See the [Wiki](https://github.com/Brrivera08/S25_CSS_G2_BR_SL/wiki) for:
 
 ---
 
+##  Conclusions
+
+In conclusion, this project successfully demonstrates the implementation of a secure access control system that reflects modern best practices in computer systems security. By integrating multifactor authentication, role-based access control, HR process alignment, and real-time monitoring, the system offers a layered defense approach suitable for enterprise environments. Through the development and simulation of this environment, our team gained valuable insights into the complexities of access management, the importance of security auditing, and the real-world challenges of enforcing least privilege. This project not only reinforced our technical skills in Python and Flask development but also deepened our understanding of the critical role that security protocols play in protecting digital infrastructure.
+
 ## 👥 Authors
 
 - @Brrivera08  
