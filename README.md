@@ -53,6 +53,12 @@ The main goal of this project is to:
 - **smtplib**, **secrets**, **itsdangerous**, **Flask-Limiter**
 - Optional: **CAPTCHA API**, **Slack webhook**
 
+## References
+
+- NIST. (2020). Zero Trust Architecture. https://doi.org/10.6028/NIST.SP.800-207
+- OWASP. (n.d.). Authentication Cheat Sheet. https://cheatsheetseries.owasp.org
+- Flask Documentation. https://flask.palletsprojects.com
+
 ---
 
 ## 📖 Use Cases
