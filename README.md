@@ -1,6 +1,6 @@
 # 🛡️ S25_CSS_G2_BR_SL – Computer Systems Security Project
 
-This project simulates a secure access control environment built to demonstrate core concepts in computer systems security. It integrates multiple layers of authentication, role-based access, HR integration, and automated monitoring to reflect real-world enterprise security operations.
+This project simulates a comprehensive secure access control environment designed to showcase and implement fundamental principles of computer systems security. It goes beyond basic authentication by incorporating multiple layers of protection, including password-based login and multi-factor authentication, ensuring that only authorized users gain access to sensitive resources. The system employs role-based access control (RBAC) to enforce permission boundaries, while also integrating with human resources workflows to manage onboarding, offboarding, and temporary access assignments in a controlled and auditable manner. Additionally, automated monitoring and logging functionalities have been included to provide visibility into access events, allowing for timely detection of suspicious behavior or policy violations. Collectively, these components mirror real-world enterprise-level security infrastructure, making the project a practical and educational demonstration of secure system design.
 
 ---
 
